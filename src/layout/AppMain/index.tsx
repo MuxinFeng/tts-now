@@ -8,7 +8,7 @@ import useAppSetting from '@/hook/app'
 import './index.scss'
 
 const PanelWrapper = styled.div`
-  height: calc(100vh - 80px);
+  height: calc(100vh - 48px);
   padding-left: 37px;
   padding-right: 20px;
   background-color: #fff;

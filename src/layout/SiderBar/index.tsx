@@ -1,55 +1,50 @@
-import { Button, Affix } from 'antd'
-import { SettingOutlined } from '@ant-design/icons'
-import { css } from '@emotion/react'
-import { useState } from 'react'
-import Header from './Header'
-import Avatar from './Avatar'
-import AudioSet from './Audio'
-import { SetttingDialog } from '../Dialog'
+import { Button, Menu } from 'antd'
+import {
+  RocketOutlined,
+  RedditOutlined,
+  ChromeOutlined,
+  BellOutlined
+} from '@ant-design/icons'
+import type { MenuProps } from 'antd'
+import React, { useState } from 'react'
+
 import styles from './index.module.scss'
 
-const Index = () => {
-  const [btnBottom] = useState(0)
-  const [showSetting, setShowSetting] = useState(false)
+type MenuItem = Required<MenuProps>['items'][number]
+const getItem = (
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
+  // type?: 'group'
+): MenuItem =>
+  ({
+    key,
+    icon,
+    children,
+    label
+    // type
+  } as MenuItem)
+
+const SiderBar = () => {
+  const items: MenuItem[] = [
+    getItem('麒麟', '1', <RedditOutlined />),
+    getItem('浏览器', '2', <ChromeOutlined />),
+    getItem('通知栏', '3', <BellOutlined />),
+    getItem('工具箱', '4', <RocketOutlined />)
+  ]
   return (
-    <div className={styles.wrapper}>
-      <Affix offsetTop={0}>
-        <div>
-          <Header />
-          <div css={{ padding: '0 20px' }}>
-            <Avatar />
-          </div>
-        </div>
-      </Affix>
-      <div className={styles.settingWrapper}>
-        <AudioSet />
-      </div>
-      <Affix offsetBottom={btnBottom}>
-        <div className={styles.settingButton}>
-          <Button
-            css={{ width: '100%' }}
-            type="primary"
-            icon={<SettingOutlined />}
-            size="large"
-            onClick={() => {
-              setShowSetting(true)
-            }}
-          >
-            配置
-          </Button>
-        </div>
-      </Affix>
-      {showSetting ? (
-        <SetttingDialog
-          closeCallBack={() => {
-            setShowSetting(false)
-          }}
-        />
-      ) : (
-        <div />
-      )}
+    <div className={styles.wrapper} style={{ color: '#3d4a5f' }}>
+      <Menu
+        defaultSelectedKeys={['1']}
+        mode="inline"
+        inlineCollapsed
+        inlineIndent={48}
+        items={items}
+        theme="dark"
+      />
     </div>
   )
 }
 
-export default Index
+export default SiderBar
