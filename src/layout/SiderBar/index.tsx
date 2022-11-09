@@ -3,14 +3,19 @@ import {
   RocketOutlined,
   RedditOutlined,
   ChromeOutlined,
-  BellOutlined
+  BellOutlined,
+  CalendarOutlined,
+  WechatOutlined,
+  SketchOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import React, { useState } from 'react'
+import pageStore, { PageEnum } from '@/store/page'
 
 import styles from './index.module.scss'
 
 type MenuItem = Required<MenuProps>['items'][number]
+
 const getItem = (
   label: React.ReactNode,
   key: React.Key,
@@ -18,6 +23,7 @@ const getItem = (
   children?: MenuItem[]
   // type?: 'group'
 ): MenuItem =>
+  // eslint-disable-next-line implicit-arrow-linebreak
   ({
     key,
     icon,
@@ -27,11 +33,15 @@ const getItem = (
   } as MenuItem)
 
 const SiderBar = () => {
+  const { setCurrentPage } = pageStore
   const items: MenuItem[] = [
-    getItem('麒麟', '1', <RedditOutlined />),
-    getItem('浏览器', '2', <ChromeOutlined />),
-    getItem('通知栏', '3', <BellOutlined />),
-    getItem('工具箱', '4', <RocketOutlined />)
+    getItem('麒麟', PageEnum.qilin, <RedditOutlined />),
+    getItem('浏览器', PageEnum.browser, <ChromeOutlined />),
+    getItem('通知栏', PageEnum.notice, <BellOutlined />),
+    getItem('工具箱', PageEnum.toolbox, <RocketOutlined />),
+    getItem('日历', PageEnum.calendar, <CalendarOutlined />),
+    getItem('会话', PageEnum.chat, <WechatOutlined />),
+    getItem('造物', PageEnum.marvel, <SketchOutlined />)
   ]
   return (
     <div className={styles.wrapper} style={{ color: '#3d4a5f' }}>
@@ -41,6 +51,9 @@ const SiderBar = () => {
         inlineCollapsed
         inlineIndent={48}
         items={items}
+        onSelect={(item) => {
+          setCurrentPage(item.key as any)
+        }}
         theme="dark"
       />
     </div>
