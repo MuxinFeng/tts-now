@@ -1,8 +1,9 @@
 .main-wrapper {
-  width: calc(100vw - 280px);
+  width: 100%;
   height: calc(100vh - 48px);
   overflow: hidden;
   background-color: #f4f6fa;
+  padding: 14px 16px;
 
   .ant-tabs-nav {
     margin-bottom: 0 !important;

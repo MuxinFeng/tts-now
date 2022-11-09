@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-closing-bracket-location */
 import styled from '@emotion/styled'
 import { Layout } from 'antd'
 import AppMain from './AppMain'
@@ -15,14 +16,10 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: flex-start;
 `
+// eslint-disable-next-line object-curly-newline
 const { Header, Content, Footer, Sider } = Layout
 
 const Index = () => (
-  // <Wrapper>
-  //   <SiderBar />
-  //   <AppMain />
-  //   <CheckUpdateDialog />
-  // </Wrapper>
   <Layout>
     <Header
       style={{
