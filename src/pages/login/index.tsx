@@ -38,6 +38,7 @@ import CaiXuKun from '../../assets/img/caixunkun.png'
 
 // import Box from '@mui/material/Box'
 import './index.scss'
+import { fetchToken } from '@/services'
 
 interface FormValues {
   username?: string
@@ -77,12 +78,15 @@ const Login = (props: Props) => {
   const { loginSuccess } = props
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true)
-    setTimeout(() => {
-      loginSuccess()
-      setLoading(false)
-    }, 2000)
+    const { pigeon } = await fetchToken(
+      { username: 'fengxin', password: 'Fx33561088' },
+      ''
+    )
+    console.log(pigeon)
+    loginSuccess()
+    setLoading(false)
   }
 
   return (
