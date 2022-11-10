@@ -5,6 +5,8 @@ import pageStore, { PageEnum } from '@/store/page'
 
 import './index.scss'
 import MineCalendar from '@/pages/MineCalendar'
+import Chatting from '@/pages/Chatting'
+import Marvel from '@/pages/Marvel'
 
 const Index = () => {
   const { currentPage } = pageStore
@@ -23,7 +25,10 @@ const Index = () => {
 
       case PageEnum.calendar:
         return <MineCalendar />
-
+      case PageEnum.chat:
+        return <Chatting />
+      case PageEnum.marvel:
+        return <Marvel />
       default:
         return <MineCalendar />
     }
