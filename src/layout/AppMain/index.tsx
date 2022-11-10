@@ -5,6 +5,8 @@ import pageStore, { PageEnum } from '@/store/page'
 
 import './index.scss'
 import MineCalendar from '@/pages/MineCalendar'
+import MindMap from '@/pages/MindMap'
+import TodoList from '@/pages/TodoList'
 import Chatting from '@/pages/Chatting'
 import Marvel from '@/pages/Marvel'
 
@@ -29,6 +31,12 @@ const Index = () => {
         return <Chatting />
       case PageEnum.marvel:
         return <Marvel />
+      case PageEnum.mindMap:
+        return <MindMap />
+
+      case PageEnum.todoList:
+        return <TodoList />
+
       default:
         return <MineCalendar />
     }
