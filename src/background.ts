@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable operator-linebreak */
 import {
   app,
   protocol,
@@ -5,7 +7,9 @@ import {
   ipcMain,
   Menu,
   dialog,
-  shell
+  shell,
+  BrowserView,
+  webContents
 } from 'electron'
 
 const Store = require('electron-store')
@@ -37,9 +41,9 @@ function stopKey(_win: BrowserWindow) {
     // input.control 为windows CTRL；input.meta 为mac Ctrl键
     // 以下条件为禁止组合键和F键 刷新和调试
     if (
-      ((input.control || input.meta)
-        && KEY_BLACK_LIST.includes(input.key.toUpperCase()))
-      || FKEY_BLACK_LIST.includes(input.key.toUpperCase())
+      ((input.control || input.meta) &&
+        KEY_BLACK_LIST.includes(input.key.toUpperCase())) ||
+      FKEY_BLACK_LIST.includes(input.key.toUpperCase())
     ) {
       event.preventDefault()
     }
@@ -79,8 +83,8 @@ function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration:
-        (process.env.ELECTRON_NODE_INTEGRATION || 'true').toUpperCase()
-        === 'TRUE',
+        (process.env.ELECTRON_NODE_INTEGRATION || 'true').toUpperCase() ===
+        'TRUE',
       contextIsolation: false,
       webSecurity: false
     }
@@ -225,34 +229,34 @@ app.on('second-instance', () => {
 const menuTemplate: any = [
   ...(isMac
     ? [
-      {
-        label: app.name,
-        submenu: [
-          { role: 'about', label: '关于' },
-          { type: 'separator' },
-          { role: 'services' },
-          { type: 'separator' },
-          { role: 'hide', label: '隐藏' },
-          { role: 'hideOthers' },
-          { role: 'unhide' },
-          { type: 'separator' },
-          { role: 'quit', label: '退出' }
-        ]
-      }
-    ]
+        {
+          label: app.name,
+          submenu: [
+            { role: 'about', label: '关于' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide', label: '隐藏' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit', label: '退出' }
+          ]
+        }
+      ]
     : [
-      {
-        label: config.appName,
-        submenu: [
-          {
-            label: '退出',
-            click: () => {
-              app.quit()
+        {
+          label: config.appName,
+          submenu: [
+            {
+              label: '退出',
+              click: () => {
+                app.quit()
+              }
             }
-          }
-        ]
-      }
-    ]),
+          ]
+        }
+      ]),
   {
     label: '编辑',
     submenu: [
@@ -264,15 +268,15 @@ const menuTemplate: any = [
       { role: 'paste' },
       ...(isMac
         ? [
-          { role: 'pasteAndMatchStyle' },
-          { role: 'delete' },
-          { role: 'selectAll' },
-          { type: 'separator' },
-          {
-            label: 'Speech',
-            submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
-          }
-        ]
+            { role: 'pasteAndMatchStyle' },
+            { role: 'delete' },
+            { role: 'selectAll' },
+            { type: 'separator' },
+            {
+              label: 'Speech',
+              submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
+            }
+          ]
         : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }])
     ]
   },
