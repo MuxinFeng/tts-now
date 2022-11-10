@@ -80,11 +80,18 @@ const Login = (props: Props) => {
 
   const handleLogin = async () => {
     setLoading(true)
-    const { pigeon } = await fetchToken(
+    const { token } = await fetchToken(
       { username: 'fengxin', password: 'Fx33561088' },
       ''
     )
-    console.log(pigeon)
+    console.log(token)
+    const myNotification = new Notification('登录成功', {
+      body: '全都是科技与狠货啊'
+    })
+
+    myNotification.onclick = () => {
+      console.log('通知被点击后触发')
+    }
     loginSuccess()
     setLoading(false)
   }
