@@ -1,16 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
-import Index from './layout'
-import {
-  AppContext, appSetting, appSettingCacheKey, store
-} from '@/config'
+
+import { AppContext, appSetting, appSettingCacheKey, store } from '@/config'
 import { appReset } from '@/utils/core'
+
+import Login from './pages/login'
+import Index from './layout'
 
 appReset()
 
 export default () => {
   const [setting, setSetting] = useState(appSetting)
+  const [isLogin, setIsLogin] = useState(false)
 
   const updateConfig = (newSetting: {
     [T in keyof APP.AppSetting]?: APP.AppSetting[T]
@@ -22,7 +24,7 @@ export default () => {
     store.set(appSettingCacheKey, setting)
   }, [setting])
 
-  const appConextValue = useMemo(
+  const appContextValue = useMemo(
     () => ({
       appSetting: setting,
       setAppSetting: updateConfig
@@ -32,8 +34,8 @@ export default () => {
 
   return (
     <ConfigProvider direction="ltr" locale={zhCN}>
-      <AppContext.Provider value={appConextValue}>
-        <Index />
+      <AppContext.Provider value={appContextValue}>
+        {isLogin ? <Index /> : <Login loginSuccess={() => setIsLogin(true)} />}
       </AppContext.Provider>
     </ConfigProvider>
   )
