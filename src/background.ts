@@ -4,13 +4,15 @@ import {
   app,
   protocol,
   BrowserWindow,
+  BrowserView,
   ipcMain,
   Menu,
   dialog,
   shell,
-  BrowserView,
-  webContents
+  session
 } from 'electron'
+
+import { nanoid } from 'nanoid'
 
 const Store = require('electron-store')
 
@@ -19,7 +21,13 @@ const PackgeInfo = require('../package.json')
 const config = require('../app.config')
 
 let win: BrowserWindow
+let currView: BrowserView
+let qilinView: BrowserView
+const viewPosition = {
+  x: 208, y: 54, width: 0, height: 0
+}
 
+const viewList: BrowserView[] = []
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isMac = process.platform === 'darwin'
 
@@ -92,11 +100,10 @@ function createWindow() {
 
   // 禁止页面不可见时停止计时器。防止setTimeout问题
   win.webContents.setBackgroundThrottling(false)
-
   if (isDevelopment) {
     win.loadURL(`http://${config.devServer.host}:${config.devServer.port}`)
     win.resizable = true
-    win.webContents.openDevTools()
+    win.webContents.openDevTools({ mode: 'detach' })
   } else {
     // Load the index.html when not in development
     win.loadURL(`file://${__dirname}/index.html`)
@@ -107,6 +114,15 @@ function createWindow() {
       win.show()
     })
   }
+  // 添加变更窗口方法
+  win.on('will-resize', (_event, bound) => {
+    const { width, height } = bound
+    viewPosition.width = width - 20
+    viewPosition.height = height - 20
+    if (currView) {
+      currView.setBounds(viewPosition)
+    }
+  })
 }
 
 // 这段程序将会在 Electron 结束初始化
@@ -141,6 +157,25 @@ app.on('ready', () => {
         })
       })
   })
+  ipcMain.on('window-set-cookie', (_event, value) => {
+    const cookie = { url: 'https://qilin.zaihuiba.com/', name: 'pigeon', value }
+    session.defaultSession.cookies.set(cookie)
+  })
+
+  ipcMain.on('open-qilin-view', (_event, position) => {
+    const view = new BrowserView()
+    win.addBrowserView(view)
+    view.setBounds(position)
+    view.setAutoResize({
+      width: true,
+      height: true,
+      horizontal: true,
+      vertical: true
+    })
+    view.webContents.loadURL('https://qilin.zaihuiba.com/')
+    viewList.push(view)
+    currView = view
+  })
 
   ipcMain.on('open-external', (_event, arg) => {
     shell.openExternal(arg)
@@ -151,22 +186,22 @@ app.on('ready', () => {
     _event.reply('getpath', {
       path: app.getPath(
         arg.pathName as
-          | 'home'
-          | 'appData'
-          | 'userData'
-          | 'sessionData'
-          | 'temp'
-          | 'exe'
-          | 'module'
-          | 'desktop'
-          | 'documents'
-          | 'downloads'
-          | 'music'
-          | 'pictures'
-          | 'videos'
-          | 'recent'
-          | 'logs'
-          | 'crashDumps'
+        | 'home'
+        | 'appData'
+        | 'userData'
+        | 'sessionData'
+        | 'temp'
+        | 'exe'
+        | 'module'
+        | 'desktop'
+        | 'documents'
+        | 'downloads'
+        | 'music'
+        | 'pictures'
+        | 'videos'
+        | 'recent'
+        | 'logs'
+        | 'crashDumps'
       ),
       arg
     })
@@ -188,6 +223,62 @@ app.on('ready', () => {
       .catch((error) => {
         console.log(error)
       })
+  })
+  // 打开麒麟窗口
+  ipcMain.on('add_qilin_view', (_event, url) => {
+    const view = new BrowserView()
+    win.addBrowserView(view)
+    view.setBounds(viewPosition)
+    view.setAutoResize({
+      width: true,
+      height: true,
+      horizontal: true
+    })
+    view.webContents.loadURL(url)
+    viewList.push(view)
+    currView = view
+  })
+  // 创建无痕窗口方法
+  ipcMain.on('add_traceless_view', (_event, url) => {
+    console.log(url)
+    const view = new BrowserView({
+      webPreferences: {
+        // partition 项设置唯一值使不同的页面使用不同的 session
+        partition: nanoid()
+      }
+    })
+    win.addBrowserView(view)
+    view.setBounds(viewPosition)
+    view.setAutoResize({
+      width: true,
+      height: true,
+      horizontal: true,
+      vertical: true
+    })
+    view.webContents.loadURL(url)
+    viewList.push(view)
+    currView = view
+  })
+  // 切换无痕窗口方法
+  ipcMain.on('switch_traceless_view', (_event, index) => {
+    win.setTopBrowserView(viewList[index])
+  })
+  // 删除无痕窗口方法
+  ipcMain.on('delete_traceless_view', (_event, index) => {
+    win.removeBrowserView(viewList[index])
+    viewList.splice(index, 1)
+  })
+  // 隐藏无痕窗口方法
+  ipcMain.on('hidden_traceless_view', (_event) => {
+    currView.setBounds({
+      x: 0, y: 0, width: 0, height: 0
+    })
+  })
+  ipcMain.on('handle_view_position', (_event, position) => {
+    viewPosition.x += position.x
+    viewPosition.y += position.y
+    viewPosition.width = position.width - position.x
+    viewPosition.height = position.height - position.y
   })
 })
 
@@ -229,34 +320,34 @@ app.on('second-instance', () => {
 const menuTemplate: any = [
   ...(isMac
     ? [
-        {
-          label: app.name,
-          submenu: [
-            { role: 'about', label: '关于' },
-            { type: 'separator' },
-            { role: 'services' },
-            { type: 'separator' },
-            { role: 'hide', label: '隐藏' },
-            { role: 'hideOthers' },
-            { role: 'unhide' },
-            { type: 'separator' },
-            { role: 'quit', label: '退出' }
-          ]
-        }
-      ]
+      {
+        label: app.name,
+        submenu: [
+          { role: 'about', label: '关于' },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide', label: '隐藏' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit', label: '退出' }
+        ]
+      }
+    ]
     : [
-        {
-          label: config.appName,
-          submenu: [
-            {
-              label: '退出',
-              click: () => {
-                app.quit()
-              }
+      {
+        label: config.appName,
+        submenu: [
+          {
+            label: '退出',
+            click: () => {
+              app.quit()
             }
-          ]
-        }
-      ]),
+          }
+        ]
+      }
+    ]),
   {
     label: '编辑',
     submenu: [
@@ -268,15 +359,15 @@ const menuTemplate: any = [
       { role: 'paste' },
       ...(isMac
         ? [
-            { role: 'pasteAndMatchStyle' },
-            { role: 'delete' },
-            { role: 'selectAll' },
-            { type: 'separator' },
-            {
-              label: 'Speech',
-              submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
-            }
-          ]
+          { role: 'pasteAndMatchStyle' },
+          { role: 'delete' },
+          { role: 'selectAll' },
+          { type: 'separator' },
+          {
+            label: 'Speech',
+            submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
+          }
+        ]
         : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }])
     ]
   },

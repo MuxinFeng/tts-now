@@ -20,6 +20,7 @@ import {
   // CardActions,
   // CircularProgress
 } from 'antd'
+import { ipcRenderer } from 'electron'
 import SandBox from '../../assets/img/avatar.png'
 import XinDong from '../../assets/img/xindong.jpg'
 import CaiXuKun from '../../assets/img/caixunkun.png'
@@ -84,6 +85,7 @@ const Login = (props: Props) => {
       { username: 'fengxin', password: 'Fx33561088' },
       ''
     )
+    ipcRenderer.send('window-set-cookie', token)
     console.log(token)
     const myNotification = new Notification('登录成功', {
       body: '全都是科技与狠货啊'
