@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const changeUrl = (index) => {
     ipcRenderer.send(('switch_traceless_view'), index)
   }
-  useEffect(() => ipcRenderer.send('hidden_traceless_view'), [])
+  useEffect(() => () => ipcRenderer.send('hidden_traceless_view'), [])
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
