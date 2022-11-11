@@ -1,35 +1,17 @@
-// import { Form, Input, Radio } from 'antd'
-// import React, { useEffect, useState } from 'react'
-// import ZZMind from 'zz-mind-react'
+/* eslint-disable jsx-a11y/iframe-has-title */
+import React, { useEffect, useRef } from 'react'
+import './index.scss'
 
-// // import MindmapComponent from './mindmap'
-
-// // const MindMap = () => (
-// //   <MindmapComponent />
-// // )
-
-// export default (props) => {
-//   const [minder, setMinder] = useState(null)
-
-//   useEffect(() => {
-//     console.log('minder => ', minder)
-//   }, [minder])
-
-//   return (
-//     <ZZMind
-//       type="edit"
-//       caseRule={0}
-//       maxLevel={10}
-//       editorStyle={{ height: '100vh' }}
-//       // eslint-disable-next-line @typescript-eslint/no-shadow
-//       onMinder={(minder: any) => setMinder(() => minder)}
-//     />
-//   )
-// }
-import React from 'react'
-
-const index = () => (
-  <div>index</div>
+const MindMap = () => (
+  <div className="mind-map-container" style={{ width: '100%', height: '100%' }}>
+    <iframe
+      style={{
+        width: '100%', height: '100%', border: '0', padding: '0'
+      }}
+      src="https://c.runoob.com/more/kitymind/index.html"
+    />
+    <div className="title">五个火枪手思维导图</div>
+  </div>
 )
 
-export default index
+export default MindMap
