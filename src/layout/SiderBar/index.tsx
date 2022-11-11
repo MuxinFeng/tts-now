@@ -38,11 +38,10 @@ const SiderBar = () => {
     getItem('麒麟', PageEnum.qilin, <RedditOutlined />),
     getItem('浏览器', PageEnum.browser, <ChromeOutlined />),
     getItem('通知栏', PageEnum.notice, <BellOutlined />),
-    getItem('工具箱', PageEnum.toolbox, <RocketOutlined />),
     getItem('日历', PageEnum.calendar, <CalendarOutlined />),
     getItem('会话', PageEnum.chat, <WechatOutlined />),
     getItem('造物', PageEnum.marvel, <SketchOutlined />),
-    getItem('脑图', PageEnum.mindMap, <SketchOutlined />),
+    getItem('脑图', PageEnum.mindMap, <SketchOutlined />)
   ]
   return (
     <div className={styles.wrapper} style={{ color: '#3d4a5f' }}>
