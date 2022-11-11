@@ -5,7 +5,7 @@ const QiLin = () => {
   useEffect(() => {
     ipcRenderer.send('open-qilin-view', { x: 210, y: 60 })
     return () => {
-      ipcRenderer.send('hidden_traceless_view')
+      ipcRenderer.send('close-qilin-view')
     }
   }, [])
   return (

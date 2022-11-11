@@ -186,6 +186,13 @@ app.on('ready', () => {
     currView = qilinView
   })
 
+  // 关闭麒麟页面
+  ipcMain.on('close-qilin-view', (_event) => {
+    qilinView.setBounds({
+      x: 0, y: 0, width: 0, height: 0
+    })
+  })
+
   ipcMain.on('open-external', (_event, arg) => {
     shell.openExternal(arg)
   })
@@ -256,7 +263,9 @@ app.on('ready', () => {
   })
   // 切换无痕窗口方法
   ipcMain.on('switch_traceless_view', (_event, index) => {
-    win.setTopBrowserView(viewList[index])
+    const view = viewList[index]
+    win.setTopBrowserView(view)
+    view.setBounds(viewPosition)
   })
   // 删除无痕窗口方法
   ipcMain.on('delete_traceless_view', (_event, index) => {
@@ -265,8 +274,10 @@ app.on('ready', () => {
   })
   // 隐藏无痕窗口方法
   ipcMain.on('hidden_traceless_view', (_event) => {
-    currView.setBounds({
-      x: 0, y: 0, width: 0, height: 0
+    viewList.forEach((view) => {
+      view.setBounds({
+        x: 0, y: 0, width: 0, height: 0
+      })
     })
   })
   ipcMain.on('handle_view_position', (_event, position) => {
