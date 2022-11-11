@@ -15,12 +15,15 @@ const App: React.FC = () => {
   const [inputUrl, setInputUrl] = useState('')
   const [open, setOpen] = useState(false)
   const [urlList, setUrlList] = useState([])
+  const [urlIndex, setUrlIndex] = useState(0)
   const showModal = () => {
     ipcRenderer.send('hidden_traceless_view')
     setOpen(true)
   }
   const openView = (url) => {
-    setUrlList([...urlList, { url, index: urlList.length }] as any)
+    const index = urlList.length
+    setUrlIndex(index)
+    setUrlList([...urlList, { url, index }] as any)
     ipcRenderer.send('handle_view_position', { x: 418, y: 64 })
     ipcRenderer.send('add_traceless_view', url)
   }
@@ -29,6 +32,7 @@ const App: React.FC = () => {
     setOpen(false)
   }
   const changeUrl = (index) => {
+    setUrlIndex(index)
     ipcRenderer.send(('switch_traceless_view'), index)
   }
   useEffect(() => () => ipcRenderer.send('hidden_traceless_view'), [])
@@ -74,7 +78,7 @@ const App: React.FC = () => {
             style={{ overflowY: 'auto' }}
             dataSource={urlList}
             renderItem={(item: any) => (
-              <List.Item onClick={() => { changeUrl(item.index) }}>
+              <List.Item onClick={() => { changeUrl(item.index) }} style={{ color: item.index === urlIndex ? '#389e0d' : '' }}>
                 {item.url}
               </List.Item>
             )}
