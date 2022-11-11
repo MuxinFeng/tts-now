@@ -3,9 +3,7 @@ import { ipcRenderer } from 'electron'
 
 const QiLin = () => {
   useEffect(() => {
-    ipcRenderer.send('open-qilin-view', {
-      x: 230, y: 0, width: 824, height: 697
-    })
+    ipcRenderer.send('open-qilin-view', { x: 210, y: 60 })
     return () => {
       ipcRenderer.send('hidden_traceless_view')
     }

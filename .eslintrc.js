@@ -46,6 +46,7 @@ module.exports = {
       }
     ],
     'semi': ['error', 'never'],
+    'linebreak-style': ['off', 'windows'],
     'comma-dangle': ['error', 'never'],
     'func-names': 'off',
     'import/no-unresolved': 'off',

@@ -23,6 +23,7 @@ const config = require('../app.config')
 let win: BrowserWindow
 let currView: BrowserView
 let qilinView: BrowserView
+
 const viewPosition = {
   x: 208, y: 54, width: 0, height: 0
 }
@@ -118,7 +119,7 @@ function createWindow() {
   win.on('will-resize', (_event, bound) => {
     const { width, height } = bound
     viewPosition.width = width - 20
-    viewPosition.height = height - 20
+    viewPosition.height = height - 70
     if (currView) {
       currView.setBounds(viewPosition)
     }
@@ -157,24 +158,32 @@ app.on('ready', () => {
         })
       })
   })
+
+  // 设置麒麟 cookie
   ipcMain.on('window-set-cookie', (_event, value) => {
     const cookie = { url: 'https://qilin.zaihuiba.com/', name: 'pigeon', value }
     session.defaultSession.cookies.set(cookie)
   })
 
+  // 加载麒麟页面
   ipcMain.on('open-qilin-view', (_event, position) => {
-    const view = new BrowserView()
-    win.addBrowserView(view)
-    view.setBounds(position)
-    view.setAutoResize({
-      width: true,
+    const bound = win.getBounds()
+    if (qilinView) {
+      win.setTopBrowserView(qilinView)
+    } else {
+      const view = new BrowserView()
+      win.addBrowserView(view)
+      qilinView = view
+      qilinView.webContents.loadURL('https://qilin.zaihuiba.com/')
+    }
+    position.width = bound.width - position.x - 20
+    position.height = bound.height - position.y - 70
+    qilinView.setBounds(position)
+    qilinView.setAutoResize({
       height: true,
-      horizontal: true,
-      vertical: true
+      horizontal: true
     })
-    view.webContents.loadURL('https://qilin.zaihuiba.com/')
-    viewList.push(view)
-    currView = view
+    currView = qilinView
   })
 
   ipcMain.on('open-external', (_event, arg) => {
@@ -224,20 +233,6 @@ app.on('ready', () => {
         console.log(error)
       })
   })
-  // 打开麒麟窗口
-  ipcMain.on('add_qilin_view', (_event, url) => {
-    const view = new BrowserView()
-    win.addBrowserView(view)
-    view.setBounds(viewPosition)
-    view.setAutoResize({
-      width: true,
-      height: true,
-      horizontal: true
-    })
-    view.webContents.loadURL(url)
-    viewList.push(view)
-    currView = view
-  })
   // 创建无痕窗口方法
   ipcMain.on('add_traceless_view', (_event, url) => {
     console.log(url)
@@ -275,10 +270,12 @@ app.on('ready', () => {
     })
   })
   ipcMain.on('handle_view_position', (_event, position) => {
-    viewPosition.x += position.x
-    viewPosition.y += position.y
-    viewPosition.width = position.width - position.x
-    viewPosition.height = position.height - position.y
+    const bound = win.getBounds()
+    viewPosition.x = position.x
+    viewPosition.y = position.y
+
+    viewPosition.width = bound.width - position.x - 20
+    viewPosition.height = bound.height - position.y - 40
   })
 })
 

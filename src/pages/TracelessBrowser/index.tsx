@@ -11,23 +11,26 @@ import elmImg from '../../static/imgs/elm.png'
 const {
   Content, Sider
 } = Layout
-const urlList: string[] = []
 const App: React.FC = () => {
   const [inputUrl, setInputUrl] = useState('')
   const [open, setOpen] = useState(false)
+  const [urlList, setUrlList] = useState([])
   const showModal = () => {
+    ipcRenderer.send('hidden_traceless_view')
     setOpen(true)
   }
-  const openView = (url: string) => {
-    urlList.push(url)
-    ipcRenderer.send('handle_view_position', {
-      x: 230, y: 0, width: 824, height: 697
-    })
+  const openView = (url) => {
+    setUrlList([...urlList, { url, index: urlList.length }] as any)
+    ipcRenderer.send('handle_view_position', { x: 418, y: 64 })
     ipcRenderer.send('add_traceless_view', url)
   }
   const hideModal = () => {
     openView(inputUrl)
     setOpen(false)
+  }
+  const changeUrl = (index) => {
+    console.log(index)
+    ipcRenderer.send(('switch_traceless_view'), index)
   }
   useEffect(() => ipcRenderer.send('hidden_traceless_view'), [])
   return (
@@ -71,9 +74,9 @@ const App: React.FC = () => {
           <List
             style={{ overflowY: 'auto' }}
             dataSource={urlList}
-            renderItem={(item) => (
-              <List.Item>
-                {item}
+            renderItem={(item: any) => (
+              <List.Item onClick={() => { changeUrl(item.index) }}>
+                {item.url}
               </List.Item>
             )}
           />
@@ -88,6 +91,7 @@ const App: React.FC = () => {
         title="自定义网址"
         open={open}
         onOk={hideModal}
+        onCancel={() => setOpen(false)}
         okText="确认"
       >
         <Input placeholder="输入您要访问的网站" value={inputUrl} onChange={(e) => setInputUrl(e.target.value)} />
