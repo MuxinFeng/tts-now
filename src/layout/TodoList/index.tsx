@@ -1,20 +1,30 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Modal, Input } from 'antd'
+import {
+  useEffect, useMemo, useState, FC
+} from 'react'
 
 import { Form } from './components/Form'
-import { Input } from './components/Input'
 import { Tasks } from './components/Tasks'
-
-import styles from './styles/app.module.css'
+import './index.scss'
 
 const LOCALSTORAGE_TASKS_KEY = 'todolist-tasks'
 
-const TodoList = () => {
+interface Props {
+  visible: boolean
+  onClose: () => void
+}
+
+const TodoList: FC<Props> = ({ visible, onClose }) => {
   const [tasks, setTasks] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTaskName, setSearchTaskName] = useState('')
-
   const onAddTask = (newTask) => {
     setTasks((currentState) => [...currentState, newTask] as any)
+    // eslint-disable-next-line no-new
+    new Notification('火枪手你好', {
+      title: '温馨提示',
+      body: `${newTask.name}的任务已经建好等待完成`
+    } as any)
     setSearchTaskName('')
   }
 
@@ -31,15 +41,12 @@ const TodoList = () => {
     setTasks(updatedTask)
   }
 
-  // Esse bloco de código é disparado toda a vez que o array de
-  // tasks sofrer alguma alteração(add, remove, update)
   useEffect(() => {
     if (!isLoading) {
       localStorage.setItem(LOCALSTORAGE_TASKS_KEY, JSON.stringify(tasks))
     }
   }, [tasks])
 
-  // Esse bloco de código é disparado ao carregar a página do usuário
   useEffect(() => {
     const tasksLocal = localStorage.getItem(LOCALSTORAGE_TASKS_KEY)
     // eslint-disable-next-line no-unused-expressions
@@ -60,40 +67,43 @@ const TodoList = () => {
   )
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <h1>搜索</h1>
-
-        <Form onSubmit={onAddTask} />
-
-        <hr />
-
-        <Input
-          type="text"
-          value={searchTaskName}
-          onChange={handleTermSearch}
-          placeholder="Pesquisar uma tarefa"
-        />
-
-        <Tasks
-          tasks={tasks}
-          searchTaskName={searchTaskName}
-          onRemoveTask={onRemoveTask}
-          onChangeCompletedTask={onChangeCompleted}
-        />
-
-        <footer className={styles.footer}>
-          <h6>
-            Total de tarefas:
-            <span>{totalTasks}</span>
-          </h6>
-
-          <h6>
-            Total de tarefas concluidas:
-            <span>{totalCompletedTasks}</span>
-          </h6>
-        </footer>
-      </div>
+    <div className="todoList-container">
+      <Modal
+        title={(
+          <Input
+            style={{ width: '95%' }}
+            type="text"
+            value={searchTaskName}
+            onChange={handleTermSearch}
+            placeholder="搜索任务"
+          />
+        )}
+        open={visible}
+        centered
+        width={1000}
+        footer={null}
+        onCancel={() => onClose()}
+      >
+        <div>
+          <Form onSubmit={onAddTask} />
+          <Tasks
+            tasks={tasks}
+            searchTaskName={searchTaskName}
+            onRemoveTask={onRemoveTask}
+            onChangeCompletedTask={onChangeCompleted}
+          />
+          <footer>
+            <div>
+              任务
+              <span>{totalTasks}</span>
+            </div>
+            <div>
+              已完成任务
+              <span>{totalCompletedTasks}</span>
+            </div>
+          </footer>
+        </div>
+      </Modal>
     </div>
   )
 }

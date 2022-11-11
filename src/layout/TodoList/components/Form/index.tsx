@@ -29,7 +29,7 @@ export const Form = ({ onSubmit }) => {
       <Input
         type="text"
         value={taskName}
-        placeholder="Nome da tarefa"
+        placeholder="在此输入任务并提醒"
         onChange={(event) => setTaskName(event.target.value)}
       />
 
@@ -39,7 +39,6 @@ export const Form = ({ onSubmit }) => {
         className={styles.form__button}
       >
         <FaPlus size={12} />
-        Adicionar
       </button>
     </form>
   )

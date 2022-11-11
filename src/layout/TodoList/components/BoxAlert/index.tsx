@@ -8,17 +8,14 @@ export const BoxAlert = ({ type }) => (
     {type === 'empty' && (
       <>
         <FaInfoCircle size={36} />
-        <p>A lista de tarefas está vazia.</p>
+        <p> 没有新建的任务</p>
       </>
     )}
 
     {type === 'warning' && (
       <>
         <FaInfoCircle size={36} />
-        <p>
-          Não foi possível localizar nenhuma tarefa, tente novamente com outro
-          termo.
-        </p>
+        <p>搜索不到任务</p>
       </>
     )}
   </div>
