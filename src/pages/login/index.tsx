@@ -15,6 +15,9 @@ import {
   Checkbox,
   Spin
 } from 'antd'
+import { ipcRenderer } from 'electron'
+import { fetchToken } from '@/services'
+
 // import SandBox from '../../assets/img/avatar.png'
 // import XinDong from '../../assets/img/xindong.jpg'
 // import CaiXuKun from '../../assets/img/caixunkun.png'
