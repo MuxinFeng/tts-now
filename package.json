@@ -104,6 +104,7 @@
     "js-cookie": "3.0.1",
     "mobx": "6.6.2",
     "mobx-react": "7.5.3",
+    "moment": "2.29.4",
     "nanoid": "^4.0.0",
     "node-downloader-helper": "^2.1.4",
     "normalize.css": "^8.0.1",

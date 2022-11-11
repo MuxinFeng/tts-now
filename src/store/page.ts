@@ -4,7 +4,6 @@ export enum PageEnum {
   qilin = 'qilin',
   browser = 'browser',
   notice = 'notice',
-  toolbox = 'toolbox',
   calendar = 'calendar',
   chat = 'chat',
   marvel = 'marvel',

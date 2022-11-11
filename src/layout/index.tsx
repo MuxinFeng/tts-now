@@ -4,12 +4,11 @@ import { useState } from 'react'
 import { SearchOutlined } from '@ant-design/icons'
 
 import { Input, Layout, Modal } from 'antd'
+import { ipcRenderer } from 'electron'
 import AppMain from './AppMain'
 import SiderBar from './SiderBar'
-import './index.scss'
-
-import { CheckUpdateDialog } from '../layout/Dialog'
 import TodoList from './TodoList'
+import './index.scss'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,11 +34,20 @@ const Index = () => {
             placeholder="搜索Ctrl+K"
             value={searchText}
             onClick={() => {
+              ipcRenderer.send('close-qilin-view')
               setShowTodoList(true)
             }}
             suffix={<SearchOutlined className="search-icon" />}
           />
-          {showTodoList ? <TodoList visible={showTodoList} onClose={() => {setShowTodoList(false) }} /> : null}
+          {showTodoList ? (
+            <TodoList
+              visible={showTodoList}
+              onClose={() => {
+                setShowTodoList(false)
+                ipcRenderer.send('open-qilin-view', { x: 210, y: 60 })
+              }}
+            />
+          ) : null}
         </div>
       </Header>
       <Layout className="content">

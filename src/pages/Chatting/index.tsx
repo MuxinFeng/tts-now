@@ -39,6 +39,22 @@ const initialMessages = [
   }
 ]
 
+const mockResponse = [
+  '不要',
+  '爱你',
+  '我是小丁',
+  '大丁呢？～',
+  '怎么回事？',
+  '在的宝贝～',
+  '摆烂了。。。',
+  '啊呜呜呜呜呜～～～',
+  '鑫哥哥呢～？～',
+  '我想请大家喝奶茶～',
+  '💗',
+  '想开车',
+  '回家抓老鼠了'
+]
+
 const Chatting = () => {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages)
 
@@ -59,7 +75,7 @@ const Chatting = () => {
         appendMsg({
           type: 'text',
           content: {
-            text: '在的宝贝~'
+            text: mockResponse[Math.floor(Math.random() * mockResponse.length)]
           },
           user: {
             avatar: dongge
@@ -79,12 +95,9 @@ const Chatting = () => {
   }
 
   return (
-    <div
-      style={{
-        display: 'inline-flex'
-      }}>
+    <div>
       <Chat
-        navbar={{ title: '嘟嘟' }}
+        navbar={{ title: '东哥哥' }}
         messages={messages}
         renderMessageContent={renderMessageContent}
         onSend={handleSend}

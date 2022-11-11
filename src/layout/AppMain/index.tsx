@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react'
 import { useMemo, useRef, useEffect } from 'react'
 import { ipcRenderer } from 'electron'
+import { Image } from 'antd'
 import useAppSetting from '@/hook/app'
 import pageStore, { PageEnum } from '@/store/page'
-
+import defaultPage from './default.jpg'
 import './index.scss'
 import MineCalendar from '@/pages/MineCalendar'
 import MindMap from '@/pages/MindMap'
@@ -29,7 +30,10 @@ const Index = () => {
       //   offsetTop, offsetLeft, offsetWidth, offsetHeight
       // } = current
       ipcRenderer.send('view_position', {
-        x: 200, y: 48, width: 824, height: 697
+        x: 200,
+        y: 48,
+        width: 824,
+        height: 697
       })
     }
   }, [wrapper])
@@ -50,11 +54,15 @@ const Index = () => {
         return <MindMap />
 
       default:
-        return <MineCalendar />
+        return <Image src={defaultPage} />
     }
   }, [currentPage])
 
-  return <div className="main-wrapper" ref={wrapper}>{changePage}</div>
+  return (
+    <div className="main-wrapper" ref={wrapper}>
+      {changePage}
+    </div>
+  )
 }
 
 export default observer(Index)
