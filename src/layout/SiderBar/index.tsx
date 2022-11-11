@@ -41,7 +41,8 @@ const SiderBar = () => {
     getItem('工具箱', PageEnum.toolbox, <RocketOutlined />),
     getItem('日历', PageEnum.calendar, <CalendarOutlined />),
     getItem('会话', PageEnum.chat, <WechatOutlined />),
-    getItem('造物', PageEnum.marvel, <SketchOutlined />)
+    getItem('造物', PageEnum.marvel, <SketchOutlined />),
+    getItem('脑图', PageEnum.mindMap, <SketchOutlined />),
   ]
   return (
     <div className={styles.wrapper} style={{ color: '#3d4a5f' }}>

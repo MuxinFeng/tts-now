@@ -7,7 +7,9 @@ export enum PageEnum {
   toolbox = 'toolbox',
   calendar = 'calendar',
   chat = 'chat',
-  marvel = 'marvel'
+  marvel = 'marvel',
+  mindMap = 'mindMap',
+  todoList = 'todoList'
 }
 
 class Page {

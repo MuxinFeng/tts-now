@@ -6,6 +6,7 @@ import pageStore, { PageEnum } from '@/store/page'
 
 import './index.scss'
 import MineCalendar from '@/pages/MineCalendar'
+import MindMap from '@/pages/MindMap'
 import Chatting from '@/pages/Chatting'
 import Marvel from '@/pages/Marvel'
 import TracelessBrowser from '@/pages/TracelessBrowser'
@@ -45,6 +46,9 @@ const Index = () => {
         return <Chatting />
       case PageEnum.marvel:
         return <Marvel />
+      case PageEnum.mindMap:
+        return <MindMap />
+
       default:
         return <MineCalendar />
     }

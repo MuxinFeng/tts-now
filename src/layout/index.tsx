@@ -1,11 +1,15 @@
 /* eslint-disable react/jsx-closing-bracket-location */
 import styled from '@emotion/styled'
-import { Layout } from 'antd'
+import { useState } from 'react'
+import { SearchOutlined } from '@ant-design/icons'
+
+import { Input, Layout, Modal } from 'antd'
 import AppMain from './AppMain'
 import SiderBar from './SiderBar'
 import './index.scss'
 
 import { CheckUpdateDialog } from '../layout/Dialog'
+import TodoList from './TodoList'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -19,31 +23,37 @@ const Wrapper = styled.div`
 // eslint-disable-next-line object-curly-newline
 const { Header, Content, Footer, Sider } = Layout
 
-const Index = () => (
-  <Layout>
-    <Header
-      style={{
-        height: '48px',
-        backgroundColor: '#001529',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-      <span style={{ color: 'white', fontSize: '16px' }}>
-        五个火枪手(ノ｀Д)ノ出品 🔫
-      </span>
-    </Header>
-    <Layout className="content">
-      <Sider>
-        <SiderBar />
-      </Sider>
-      <Layout>
-        <Content>
-          <AppMain />
-        </Content>
+const Index = () => {
+  const [searchText, setSearchText] = useState<string>()
+  const [showTodoList, setShowTodoList] = useState<boolean>(false)
+
+  return (
+    <Layout className="app-container">
+      <Header>
+        <div className="search-container">
+          <Input
+            placeholder="搜索Ctrl+K"
+            value={searchText}
+            onClick={() => {
+              setShowTodoList(true)
+            }}
+            suffix={<SearchOutlined className="search-icon" />}
+          />
+          {showTodoList ? <TodoList visible={showTodoList} onClose={() => {setShowTodoList(false) }} /> : null}
+        </div>
+      </Header>
+      <Layout className="content">
+        <Sider>
+          <SiderBar />
+        </Sider>
+        <Layout>
+          <Content>
+            <AppMain />
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
-  </Layout>
-)
+  )
+}
 
 export default Index
