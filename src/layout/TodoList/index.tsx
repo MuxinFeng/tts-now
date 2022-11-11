@@ -29,7 +29,18 @@ const TodoList: FC<Props> = ({ visible, onClose }) => {
   }
 
   const onRemoveTask = (taskId) => {
-    setTasks((currentState) => currentState.filter((task: any) => task.id !== taskId))
+    setTasks((currentState) => currentState.filter((task: any) => {
+      if (task.id === taskId) {
+        // eslint-disable-next-line no-new
+        new Notification('火枪手你好', {
+          title: '温馨提示',
+          body: `${task.name}的任务已经被删除`
+        } as any)
+      }
+      return task.id !== taskId
+    }))
+
+    setSearchTaskName('')
   }
 
   const onChangeCompleted = (taskId) => {
@@ -63,7 +74,7 @@ const TodoList: FC<Props> = ({ visible, onClose }) => {
 
   const totalCompletedTasks = useMemo(
     () => tasks.filter((task: any) => task.completed).length,
-    []
+    [tasks]
   )
 
   return (

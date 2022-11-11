@@ -37,7 +37,6 @@ const SiderBar = () => {
   const items: MenuItem[] = [
     getItem('麒麟', PageEnum.qilin, <RedditOutlined />),
     getItem('浏览器', PageEnum.browser, <ChromeOutlined />),
-    getItem('通知栏', PageEnum.notice, <BellOutlined />),
     getItem('日历', PageEnum.calendar, <CalendarOutlined />),
     getItem('会话', PageEnum.chat, <WechatOutlined />),
     getItem('造物', PageEnum.marvel, <SketchOutlined />),
