@@ -1,9 +1,7 @@
+/* eslint-disable global-require */
 import * as React from 'react'
 import { useState } from 'react'
-import PropTypes from 'prop-types'
-// import { useLocation } from 'react-router-dom'
 import {
-  Avatar,
   Button,
   Card,
   Form,
@@ -16,59 +14,45 @@ import {
   Select,
   Checkbox,
   Spin
-
-  // CardActions,
-  // CircularProgress
 } from 'antd'
-import { ipcRenderer } from 'electron'
-import SandBox from '../../assets/img/avatar.png'
-import XinDong from '../../assets/img/xindong.jpg'
-import CaiXuKun from '../../assets/img/caixunkun.png'
+// import SandBox from '../../assets/img/avatar.png'
+// import XinDong from '../../assets/img/xindong.jpg'
+// import CaiXuKun from '../../assets/img/caixunkun.png'
 
-// import AcQrcode from 'ac-qrcodes'
-
-// import LockIcon from '@mui/icons-material/Lock'
-// import {
-//   Form,
-//   required,
-//   TextInput,
-//   useTranslate,
-//   useLogin,
-//   useNotify
-// } from 'react-admin'
-
-// import Box from '@mui/material/Box'
 import './index.scss'
-import { fetchToken } from '@/services'
-
-interface FormValues {
-  username?: string
-  password?: string
-}
 
 const prefix = 'login-page'
-const contentStyle: React.CSSProperties = {
-  // height: '70vh',
-  // color: '#fff',
-  // // lineHeight: '100%',
-  // textAlign: 'center',
-  // background: '#364d79'
-}
+
 const CarouselContent = [
   {
-    img: SandBox,
-    title: '麒麟',
-    description: '窗口多开,用了都说好'
+    img: require('../../assets/img/duozhanghao.jpg'),
+    title: '多账号登录',
+    description: '家里有一个，外面也可以有多个'
   },
   {
-    img: XinDong,
-    title: '素质扩展器',
-    description: '平台组素质天花板，'
+    img: require('../../assets/img/shuijiao.jpg'),
+    title: '智能唤醒',
+    description: '轻轻唤起沉睡的心灵'
   },
   {
-    img: CaiXuKun,
-    title: '走地鸡',
-    description: '不要久坐，记得运动'
+    img: require('../../assets/img/gongju.jpg'),
+    title: '其他工具',
+    description: '用了工具，一个人就能顶半边山'
+  },
+  {
+    img: require('../../assets/img/beijing.jpg'),
+    title: '移除背景',
+    description: '一键移除背景'
+  },
+  {
+    img: require('../../assets/img/liaotian.jpg'),
+    title: '聊天工具',
+    description: '不再担心当面被怼 bug'
+  },
+  {
+    img: require('../../assets/img/zhineng.jpg'),
+    title: '你说我画',
+    description: '智能生成图片配图,比美颜更好用'
   }
 ]
 interface Props {
@@ -103,7 +87,7 @@ const Login = (props: Props) => {
       <div className={`${prefix}`}>
         <Row>
           <Col span={10}>
-            <div style={{ height: '30vh' }} />
+            <div style={{ height: '20vh' }} />
             <div className={`${prefix}-carousel`}>
               <Carousel autoplay>
                 {CarouselContent.map((item) => (
