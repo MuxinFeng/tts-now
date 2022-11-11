@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-closing-bracket-location */
