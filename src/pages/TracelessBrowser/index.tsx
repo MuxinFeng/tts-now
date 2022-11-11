@@ -29,7 +29,6 @@ const App: React.FC = () => {
     setOpen(false)
   }
   const changeUrl = (index) => {
-    console.log(index)
     ipcRenderer.send(('switch_traceless_view'), index)
   }
   useEffect(() => ipcRenderer.send('hidden_traceless_view'), [])
