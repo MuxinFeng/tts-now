@@ -23,6 +23,7 @@ const config = require('../app.config')
 let win: BrowserWindow
 let currView: BrowserView
 let qilinView: BrowserView
+let onBrowser: Boolean = false
 
 const viewPosition = {
   x: 208, y: 54, width: 0, height: 0
@@ -119,8 +120,8 @@ function createWindow() {
   win.on('will-resize', (_event, bound) => {
     const { width, height } = bound
     viewPosition.width = width - 20
-    viewPosition.height = height - 70
-    if (currView) {
+    viewPosition.height = height - 50
+    if (onBrowser && currView) {
       currView.setBounds(viewPosition)
     }
   })
@@ -167,6 +168,7 @@ app.on('ready', () => {
 
   // 加载麒麟页面
   ipcMain.on('open-qilin-view', (_event, position) => {
+    onBrowser = true
     const bound = win.getBounds()
     if (qilinView) {
       win.setTopBrowserView(qilinView)
@@ -177,7 +179,7 @@ app.on('ready', () => {
       qilinView.webContents.loadURL('https://qilin.zaihuiba.com/')
     }
     position.width = bound.width - position.x - 20
-    position.height = bound.height - position.y - 70
+    position.height = bound.height - position.y - 40
     qilinView.setBounds(position)
     qilinView.setAutoResize({
       height: true,
@@ -191,6 +193,7 @@ app.on('ready', () => {
     qilinView.setBounds({
       x: 0, y: 0, width: 0, height: 0
     })
+    onBrowser = false
   })
 
   ipcMain.on('open-external', (_event, arg) => {
@@ -242,7 +245,7 @@ app.on('ready', () => {
   })
   // 创建无痕窗口方法
   ipcMain.on('add_traceless_view', (_event, url) => {
-    console.log(url)
+    onBrowser = true
     const view = new BrowserView({
       webPreferences: {
         // partition 项设置唯一值使不同的页面使用不同的 session
@@ -279,6 +282,7 @@ app.on('ready', () => {
         x: 0, y: 0, width: 0, height: 0
       })
     })
+    onBrowser = false
   })
   ipcMain.on('handle_view_position', (_event, position) => {
     const bound = win.getBounds()
@@ -286,7 +290,7 @@ app.on('ready', () => {
     viewPosition.y = position.y
 
     viewPosition.width = bound.width - position.x - 20
-    viewPosition.height = bound.height - position.y - 40
+    viewPosition.height = bound.height - position.y - 20
   })
 })
 
