@@ -20,6 +20,7 @@ import {
   // CardActions,
   // CircularProgress
 } from 'antd'
+import { ipcRenderer } from 'electron'
 import SandBox from '../../assets/img/avatar.png'
 import XinDong from '../../assets/img/xindong.jpg'
 import CaiXuKun from '../../assets/img/caixunkun.png'
@@ -79,19 +80,20 @@ const Login = (props: Props) => {
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async () => {
-    setLoading(true)
-    const { token } = await fetchToken(
-      { username: 'fengxin', password: 'Fx33561088' },
-      ''
-    )
-    console.log(token)
-    const myNotification = new Notification('登录成功', {
-      body: '全都是科技与狠货啊'
-    })
+    // setLoading(true)
+    // const { token } = await fetchToken(
+    //   { username: 'fengxin', password: 'Fx33561088' },
+    //   ''
+    // )
+    // ipcRenderer.send('window-set-cookie', token)
+    // console.log(token)
+    // const myNotification = new Notification('登录成功', {
+    //   body: '全都是科技与狠货啊'
+    // })
 
-    myNotification.onclick = () => {
-      console.log('通知被点击后触发')
-    }
+    // myNotification.onclick = () => {
+    //   console.log('通知被点击后触发')
+    // }
     loginSuccess()
     setLoading(false)
   }
